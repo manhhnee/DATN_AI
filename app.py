@@ -1,3 +1,5 @@
+import os
+import boto3
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -5,19 +7,30 @@ from tensorflow.keras.applications.resnet import preprocess_input
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import base64
-import os
+
 
 app = Flask(__name__)
 CORS(app)
 
-# Load the CNN model for face recognition
-model = tf.keras.models.load_model("face_recognition_resnet.keras")
+
+def download_model_from_s3(bucket_name, model_key, local_path):
+    s3 = boto3.client('s3')
+    s3.download_file(bucket_name, model_key, local_path)
+
+
+bucket_name = 'datnface'
+model_key = 'face_recognition_resnet.keras'
+local_model_path = 'face_recognition_resnet.keras'
+
+download_model_from_s3(bucket_name, model_key, local_model_path)
+
+model = tf.keras.models.load_model(local_model_path)
 
 
 def predict_face(img, model):
     img_height, img_width = 160, 160
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)  # Convert to RGB
-    img_resized = cv2.resize(img_rgb, (img_width, img_height))  # Resize image
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+    img_resized = cv2.resize(img_rgb, (img_width, img_height))
     img_np = np.expand_dims(img_resized, axis=0)
     img_np = preprocess_input(img_np)
 
@@ -91,4 +104,4 @@ def recognize_api():
 
 if __name__ == '__main__':
     os.makedirs("tmp", exist_ok=True)
-    app.run(host='0.0.0.0', port=4000, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
