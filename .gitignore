@@ -1,2 +1,15 @@
 face_recognition_cnn.keras
 face_recognition_resnet.keras
+.aws/
+*.pem
+
+# Pytest
+.cache/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+aws/
+awscliv2.zip
