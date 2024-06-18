@@ -3,7 +3,7 @@ flasgger
 flask_restful
 pyairtable
 gunicorn
-flask-cors==3.1.1
+flask-cors
 opencv-python
 numpy==1.21.1
 tensorflow==2.6.0
