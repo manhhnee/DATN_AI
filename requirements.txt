@@ -1,11 +1,6 @@
-flasgger
-flask_restful
-pyairtable
-gunicorn
 flask==2.0.2
 flask-cors>=3.0.0
-opencv-python
-numpy
+opencv-python-headless==4.5.3.56  # Use headless version for non-GUI environments
+numpy==1.21.1
 tensorflow==2.16.1
 keras==3.3.3
-werkzeug
